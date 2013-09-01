@@ -1,0 +1,26 @@
+{
+    "manifest_version": 2,
+    "version": "0.1.0",
+    "name": "LiveReload 2.0",
+    "description": "Injects the LiveReload client onto the page.",
+    "author": "Roland Warmerdam",
+    "permissions": [
+        "tabs",
+        "storage"
+    ],
+    "browser_action": {
+        "default_icon": {
+            "19": "icon-inactive.png"
+        }
+    },
+    "background": {
+        "scripts": ["lodash.js", "events.js"],
+        "persistent": false
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ]
+}
