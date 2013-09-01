@@ -14,7 +14,7 @@
         }
     },
     "background": {
-        "scripts": ["lodash.js", "events.js"],
+        "page": "background.html",
         "persistent": false
     },
     "content_scripts": [

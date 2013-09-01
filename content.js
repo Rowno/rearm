@@ -12,6 +12,26 @@
         scriptElement.src = 'http://' + HOSTNAME + '/livereload.js';
         document.body.appendChild(scriptElement);
 
+
+        var connection = new WebSocket('ws://' + HOSTNAME + '/livereload');
+
+        connection.onopen = function () {
+            connection.send(JSON.stringify({
+                command: 'hello',
+                protocols: [
+                    'http://livereload.com/protocols/official-7'
+                ]
+            }));
+        };
+
+        connection.onmessage = function (event) {
+            var data = JSON.parse(event.data);
+
+            if (data.command === 'reload') {
+                chrome.runtime.sendMessage(null, 'reload');
+            }
+        };
+
         chrome.runtime.sendMessage(null, 'activated');
     }
 
