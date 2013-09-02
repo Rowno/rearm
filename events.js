@@ -3,7 +3,8 @@
 (function () {
     'use strict';
 
-    var i = 0;
+    var iconAnimating = false;
+    var queuedAnimation = false;
     var canvas = document.getElementById('canvas');
     var image = document.getElementById('icon-active');
     var context = canvas.getContext('2d');
@@ -27,6 +28,44 @@
                 '19': 'icon-' + state + '.png'
             }
         });
+    }
+
+    function animateIcon(tabId) {
+        if (iconAnimating) {
+            queuedAnimation = true;
+            return;
+        }
+
+        var i = 0;
+        iconAnimating = true;
+
+        var interval = setInterval(function () {
+            i += 15;
+
+            if (i > 360) {
+                clearInterval(interval);
+                iconAnimating = false;
+
+                if (queuedAnimation) {
+                    queuedAnimation = false;
+                    animateIcon(tabId);
+                }
+
+                return;
+            }
+
+            context.save();
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.translate(image.width / 2, image.width / 2);
+            context.rotate(i * Math.PI / 180);
+            context.drawImage(image, -image.width / 2, -image.height / 2);
+            context.restore();
+
+            chrome.browserAction.setIcon({
+                imageData: context.getImageData(0, 0, 19, 19),
+                tabId: tabId
+            });
+        }, 60);
     }
 
 
@@ -91,26 +130,7 @@
         } else if (message === 'deactivated') {
             setIcon('inactive', tabId);
         } else if (message === 'reload') {
-            var interval = setInterval(function () {
-                i += 20;
-
-                if (i > 180) {
-                    clearInterval(interval);
-                    return;
-                }
-
-                context.save();
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                context.translate(image.width / 2, image.width / 2);
-                context.rotate(i * Math.PI / 180);
-                context.drawImage(image, -image.width / 2, -image.height / 2);
-                context.restore();
-
-                chrome.browserAction.setIcon({
-                    imageData: context.getImageData(0, 0, 19, 19),
-                    tabId: tabId
-                });
-            }, 60);
+            animateIcon(tabId);
         }
     });
 }());
