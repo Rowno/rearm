@@ -1,14 +1,15 @@
 {
     "manifest_version": 2,
     "version": "0.1.0",
-    "name": "LiveReload 2.0",
-    "description": "Injects the LiveReload client onto the page.",
+    "name": "LiveReload",
+    "description": "A better LiveReload extension for Chrome.",
     "author": "Roland Warmerdam",
     "permissions": [
         "tabs",
         "storage"
     ],
     "browser_action": {
+        "default_title": "LiveReload",
         "default_icon": {
             "19": "icon-inactive.png"
         }
