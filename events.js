@@ -1,27 +1,43 @@
 /*globals _:false */
 
-(function () {
+
+var ActiveTabIds = (function () {
     'use strict';
 
-    var iconAnimating = false;
-    var queuedAnimation = false;
+    var exports = {};
+
+
+    function get(callback) {
+        chrome.storage.local.get('activeTabIds', function (items) {
+            callback(items.activeTabIds || []);
+        });
+    }
+    exports.get = get;
+
+    function set(activeTabIds) {
+        chrome.storage.local.set({'activeTabIds': activeTabIds});
+    }
+    exports.set = set;
+
+    return exports;
+}());
+
+
+var Icon = (function () {
+    'use strict';
+
+    var exports = {};
+    var animatingTabIds = [];
     var canvas = document.getElementById('canvas');
     var image = document.getElementById('icon-active');
     var context = canvas.getContext('2d');
 
 
-    var ActiveTabIds = {
-        get: function (callback) {
-            chrome.storage.local.get('activeTabIds', function (items) {
-                callback(items.activeTabIds || []);
-            });
-        },
-        set: function (activeTabIds) {
-            chrome.storage.local.set({'activeTabIds': activeTabIds});
+    function set(state, tabId) {
+        if (animatingTabIds.indexOf(tabId) !== -1) {
+            return;
         }
-    };
 
-    function setIcon(state, tabId) {
         chrome.browserAction.setIcon({
             tabId: tabId,
             path: {
@@ -30,27 +46,31 @@
         });
     }
 
-    function animateIcon(tabId) {
-        if (iconAnimating) {
-            queuedAnimation = true;
+
+    function activate(tabId) {
+        set('active', tabId);
+    }
+    exports.activate = activate;
+
+    function deactivate(tabId) {
+        set('inactive', tabId);
+    }
+    exports.deactivate = deactivate;
+
+    function animate(tabId) {
+        if (animatingTabIds.indexOf(tabId) !== -1) {
             return;
         }
 
         var i = 0;
-        iconAnimating = true;
+        animatingTabIds.push(tabId);
 
         var interval = setInterval(function () {
             i += 15;
 
             if (i > 360) {
                 clearInterval(interval);
-                iconAnimating = false;
-
-                if (queuedAnimation) {
-                    queuedAnimation = false;
-                    animateIcon(tabId);
-                }
-
+                animatingTabIds.splice(animatingTabIds.indexOf(tabId), 1);
                 return;
             }
 
@@ -67,7 +87,14 @@
             });
         }, 60);
     }
+    exports.animate = animate;
 
+    return exports;
+}());
+
+
+(function (Icon, ActiveTabIds) {
+    'use strict';
 
     chrome.browserAction.onClicked.addListener(function (tab) {
         var tabId = tab.id;
@@ -118,7 +145,6 @@
 
         var tabId = sender.tab.id;
 
-
         if (message === 'isActive') {
             ActiveTabIds.get(function (activeTabIds) {
                 var isActive = activeTabIds.indexOf(tabId) !== -1;
@@ -126,11 +152,11 @@
             });
             return true;
         } else if (message === 'activated') {
-            setIcon('active', tabId);
+            Icon.activate(tabId);
         } else if (message === 'deactivated') {
-            setIcon('inactive', tabId);
+            Icon.deactivate(tabId);
         } else if (message === 'reload') {
-            animateIcon(tabId);
+            Icon.animate(tabId);
         }
     });
-}());
+}(Icon, ActiveTabIds));
