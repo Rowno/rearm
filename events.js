@@ -31,6 +31,10 @@ var Icon = (function () {
     var canvas = document.getElementById('canvas');
     var image = document.getElementById('icon-active');
     var context = canvas.getContext('2d');
+    var size = image.width;
+
+    canvas.width = size;
+    canvas.height = size;
 
 
     function set(state, tabId) {
@@ -75,14 +79,14 @@ var Icon = (function () {
             }
 
             context.save();
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            context.translate(image.width / 2, image.width / 2);
+            context.clearRect(0, 0, size, size);
+            context.translate(size / 2, size / 2);
             context.rotate(i * Math.PI / 180);
-            context.drawImage(image, -image.width / 2, -image.height / 2);
+            context.drawImage(image, -size / 2, -size / 2);
             context.restore();
 
             chrome.browserAction.setIcon({
-                imageData: context.getImageData(0, 0, 19, 19),
+                imageData: context.getImageData(0, 0, size, size),
                 tabId: tabId
             });
         }, 60);
