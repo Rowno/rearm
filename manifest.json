@@ -8,6 +8,11 @@
         "tabs",
         "storage"
     ],
+    "icons": {
+        "16": "icon-extension-16.png",
+        "48": "icon-extension-48.png",
+        "128": "icon-extension-128.png"
+    },
     "browser_action": {
         "default_title": "LiveReload",
         "default_icon": {
