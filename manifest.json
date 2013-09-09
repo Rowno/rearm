@@ -9,14 +9,14 @@
         "storage"
     ],
     "icons": {
-        "16": "icon-extension-16.png",
-        "48": "icon-extension-48.png",
-        "128": "icon-extension-128.png"
+        "16": "img/icon-extension-16.png",
+        "48": "img/icon-extension-48.png",
+        "128": "img/icon-extension-128.png"
     },
     "browser_action": {
         "default_title": "LiveReload",
         "default_icon": {
-            "19": "icon-inactive.png"
+            "19": "img/icon-inactive.png"
         }
     },
     "background": {
@@ -26,7 +26,7 @@
     "content_scripts": [
         {
             "matches": ["<all_urls>"],
-            "js": ["content.js"]
+            "js": ["js/content.js"]
         }
     ]
 }

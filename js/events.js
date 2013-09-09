@@ -45,7 +45,7 @@ var Icon = (function () {
         chrome.browserAction.setIcon({
             tabId: tabId,
             path: {
-                '19': 'icon-' + state + '.png'
+                '19': 'img/icon-' + state + '.png'
             }
         });
     }
