@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "version": "0.1.0",
-    "name": "LiveReload",
+    "name": "Rearm",
     "description": "Automatically injects the LiveReload client onto a page.",
     "author": "Roland Warmerdam",
     "permissions": [
@@ -14,7 +14,7 @@
         "128": "img/icon-extension-128.png"
     },
     "browser_action": {
-        "default_title": "LiveReload",
+        "default_title": "Rearm",
         "default_icon": {
             "19": "img/icon-inactive.png"
         }
