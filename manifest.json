@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "version": "0.1.0",
     "name": "LiveReload",
-    "description": "A better LiveReload extension for Chrome.",
+    "description": "Automatically injects the LiveReload client onto a page.",
     "author": "Roland Warmerdam",
     "permissions": [
         "tabs",
