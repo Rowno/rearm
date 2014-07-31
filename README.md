@@ -5,6 +5,13 @@ A Google Chrome extension for automatically injecting the LiveReload client onto
 
 Can be installed from the [Chrome Web Store][].
 
+Has the following improvements over the offical LiveReload extension:
+
+ * Supports any domain name (not just hardcoded `localhost`).
+ * Reload indicator animation.
+ * Deactivates correctly.
+ * Simpler code.
+
 
 License
 -------
